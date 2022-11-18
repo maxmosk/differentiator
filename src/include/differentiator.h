@@ -4,6 +4,7 @@
 
 #include <math.h>
 #include <stddef.h>
+#include <stdio.h>
 #include "bintree.h"
 #include "differentiator_nodes.h"
 

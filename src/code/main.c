@@ -13,6 +13,7 @@ int main(void)
 
     char *exprstr = readline("Expression for differentiation: ");
     exprparse(&expr, expr.root, exprstr);
+    differentiate(expr.root);
     free(exprstr);
 
     treeDtor(&expr);

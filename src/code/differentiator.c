@@ -4,11 +4,17 @@
 
 /*(===========================================================================*/
 static const treeData_t dummydata = {0};
+
+static const char TeXdumpName[] = "texdump.tex";
 /*)===========================================================================*/
 
 
 /*(===========================================================================*/
 static enum OP_CODE getopcode(const char opsign);
+
+static void dump(const treeNode_t *node);
+
+static void dumpLaTeX(FILE *file, const treeNode_t *node);
 /*)===========================================================================*/
 
 
@@ -16,6 +22,9 @@ static enum OP_CODE getopcode(const char opsign);
 treeNode_t *differentiate(treeNode_t *expr)
 {
     CHECK(NULL != expr, NULL);
+
+    dump(expr);
+
     return (treeNode_t *) NULL;
 }
 
@@ -89,6 +98,74 @@ static enum OP_CODE getopcode(const char opsign)
 
         default:
             return OP_ERROR;
+    }
+}
+
+static void dump(const treeNode_t *node)
+{
+    FILE *outfile = fopen(TeXdumpName, "a");
+    fprintf(outfile, "$$");
+    dumpLaTeX(outfile, node);
+    fprintf(outfile, "$$\n");
+}
+
+static void dumpLaTeX(FILE *file, const treeNode_t *node)
+{
+    CHECK(NULL != file, ;);
+    CHECK(NULL != node, ;);
+
+    switch (node->data.type)
+    {
+        case NODE_NUM:
+            fprintf(file, "%lg", node->data.num);
+            return;
+        case NODE_VAR:
+            fprintf(file, "%c", node->data.var);
+            return;
+        case NODE_OP:
+            if ((NULL == node->left) || (NULL == node->right))
+            {
+                fprintf(file, "\\text{cringe}");
+                return;    
+            }
+            fprintf(file, "(");
+            switch (node->data.opcode)
+            {
+                case OP_ERROR:
+                    fprintf(file, " \\text{cringe} ");
+                    break;
+                case OP_ADD:
+                    dumpLaTeX(file, node->left);
+                    fprintf(file, " + ");
+                    dumpLaTeX(file, node->right);
+                    break;
+                case OP_SUB:
+                    dumpLaTeX(file, node->left);
+                    fprintf(file, " - ");
+                    dumpLaTeX(file, node->right);
+                    break;
+                case OP_MUL:
+                    dumpLaTeX(file, node->left);
+                    fprintf(file, " \\cdot ");
+                    dumpLaTeX(file, node->right);
+                    break;
+                case OP_DIV:
+                    fprintf(file, " \\frac{ ");
+                    dumpLaTeX(file, node->left);
+                    fprintf(file, "}{");
+                    dumpLaTeX(file, node->right);
+                    fprintf(file, "} ");
+                    break;
+
+                default:
+                    fprintf(file, "\\text{cringe}");
+            }
+            fprintf(file, ")");
+            return;
+        
+        default:
+            fprintf(file, "\\text{cringe}");
+            return;
     }
 }
 /*)===========================================================================*/

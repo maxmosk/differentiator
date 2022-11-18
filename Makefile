@@ -1,4 +1,4 @@
-.PHONY: all clean debug release
+.PHONY: all clean debug release run
 
 include CMakefile
 
@@ -34,6 +34,18 @@ $(EXECUTABLE): $(OBJFILES)
 
 $(OBJFILES): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.c $(HEADFILES)
 	$(CC) -c $(CFLAGS) -I$(HEADERDIR) -o $@ $<
+
+run: $(EXECUTABLE)
+	@cd $(BUILDDIR); ./dtor
+	@echo '\documentclass{article}' >>main.tex
+	@echo '\usepackage[utf8]{inputenc}' >>main.tex
+	@echo '\usepackage{amsmath}' >>main.tex
+	@echo '\begin{document}' >>main.tex
+	@cat build/texdump.tex >>main.tex
+	@echo '\end{document}' >>main.tex
+	@pdflatex main.tex &>/dev/null
+	@atril main.pdf
+	@yes | rm main.log main.aux main.pdf main.tex
 
 
 clean:
