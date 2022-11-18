@@ -4,6 +4,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include "bintree_settings.h"
 
 
@@ -17,7 +18,6 @@ typedef struct treeNode_t_
 
 typedef struct
 {
-    size_t size;
     treeNode_t *root;
 } tree_t;
 

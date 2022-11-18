@@ -28,7 +28,6 @@ enum TREE_CODES treeCtor(tree_t *tree)
     CHECK(NULL != tree, TREE_NULLPTR);
 
     tree->root = NULL;
-    tree->size = 0;
 
     return TREE_SUCCESS;
 }
@@ -38,7 +37,7 @@ bool treeEmpty(const tree_t *tree)
     enum TREE_CODES verify = TREE_ERROR;
     CHECK(TREE_SUCCESS == (verify = treeVerify(tree)), false);
 
-    return (NULL == tree->root) && (0 == tree->size);
+    return NULL == tree->root;
 }
 
 enum TREE_CODES treeInsertRoot(tree_t *tree, const treeData_t elem)
@@ -52,7 +51,6 @@ enum TREE_CODES treeInsertRoot(tree_t *tree, const treeData_t elem)
     CHECK(NULL != newnode, TREE_NOMEM);
 
     tree->root = newnode;
-    tree->size++;
 
     return TREE_SUCCESS;
 }
@@ -67,7 +65,6 @@ enum TREE_CODES treeInsertLeft(tree_t *tree, treeNode_t *node, const treeData_t 
     CHECK(NULL != newnode, TREE_NOMEM);
     
     node->left = newnode;
-    tree->size++;
 
     return TREE_SUCCESS;
 }
@@ -82,7 +79,6 @@ enum TREE_CODES treeInsertRight(tree_t *tree, treeNode_t *node, const treeData_t
     CHECK(NULL != newnode, TREE_NOMEM);
 
     node->right = newnode;
-    tree->size++;
 
     return TREE_SUCCESS;
 }
@@ -101,7 +97,6 @@ enum TREE_CODES treeVerify(const tree_t *tree)
     LOGPRINTF("tree_t [%p]\n", (const void *) tree);
     LOGPRINTF("{\n");
     LOGPRINTF("    root = %p\n", (void *) tree->root);
-    LOGPRINTF("    size = %zu\n", tree->size);
     LOGPRINTF("}\n");
 
     treeGraph(tree, namebuf);
@@ -120,7 +115,6 @@ enum TREE_CODES treeDtor(tree_t *tree)
    
     treeNodeDtor(tree->root);
     tree->root = NULL;
-    tree->size = SIZE_MAX;
 
     return TREE_SUCCESS;
 }
@@ -163,9 +157,8 @@ static void treeGraphAddNode(const treeNode_t *node, FILE *file)
     else
     {
         fprintf(file, "NODE%p[style=\"rounded\",shape=record,color=\"blue\",label="
-                        "\" <left> left=%p | data=%s | <right> right=%p\"];\n",
+                        "\" <left> left=%p | <right> right=%p\"];\n",
                         (const void *) node, (const void *) node->left,
-                        (NULL != node->data.string) ? node->data.string : "",
                         (const void *) node->right);
 
         if (NULL != node->left)
@@ -202,11 +195,6 @@ static void treeNodeDtor(treeNode_t *node)
     if (NULL == node)
     {
         return;
-    }
-
-    if (node->data.alloced)
-    {
-        free(node->data.string);
     }
 
     treeNodeDtor(node->right);

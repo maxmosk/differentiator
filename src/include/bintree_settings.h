@@ -2,17 +2,15 @@
 #define BINTREE_SETTINGS_H_INCLUDED__
 
 
-#include <string.h>
-#include <stdbool.h>
-
-
-#define DATA_POISON NULL
+#include "differentiator_nodes.h"
 
 
 typedef struct
 {
-    char *string;
-    bool alloced;
+    enum NODE_TYPE type;
+    enum OP_CODE opCode;
+    char var;
+    double num;
 } treeData_t;
 
 
