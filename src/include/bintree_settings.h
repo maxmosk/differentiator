@@ -8,9 +8,12 @@
 typedef struct
 {
     enum NODE_TYPE type;
-    enum OP_CODE opCode;
-    char var;
-    double num;
+    union
+    {
+        enum OP_CODE opCode;
+        char var;
+        double num;
+    };
 } treeData_t;
 
 

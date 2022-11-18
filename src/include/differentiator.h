@@ -2,6 +2,7 @@
 #define DIFFERENTIATOR_H_INCLUDED__
 
 
+#include <math.h>
 #include <stddef.h>
 #include "bintree.h"
 #include "differentiator_nodes.h"
