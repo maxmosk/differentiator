@@ -11,10 +11,11 @@ enum NODE_TYPE
 
 enum OP_CODE
 {
-    OP_ADD = 0,
-    OP_SUB = 1,
-    OP_MUL = 2,
-    OP_DIV = 3
+    OP_ERROR = -1,
+    OP_ADD   = 0,
+    OP_SUB   = 1,
+    OP_MUL   = 2,
+    OP_DIV   = 3
 };
 
 

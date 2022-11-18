@@ -10,8 +10,11 @@ int main(void)
     treeCtor(&expr);
     treeData_t dummydata = {0};
     treeInsertRoot(&expr, dummydata);
+
     char *exprstr = readline("Expression for differentiation: ");
     exprparse(&expr, expr.root, exprstr);
     free(exprstr);
+
+    treeDtor(&expr);
     return 0;
 }

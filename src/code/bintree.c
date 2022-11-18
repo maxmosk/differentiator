@@ -156,10 +156,15 @@ static void treeGraphAddNode(const treeNode_t *node, FILE *file)
     }
     else
     {
-        fprintf(file, "NODE%p[style=\"rounded\",shape=record,color=\"blue\",label="
-                        "\" <left> left=%p | <right> right=%p\"];\n",
-                        (const void *) node, (const void *) node->left,
-                        (const void *) node->right);
+        fprintf(file,   "NODE%p[style=\"rounded\",shape=record,color=\"blue\",label="
+                        "\"{"
+                        " { type=%u | opcode=%d | num=%lg | var=%c } | "
+                        "{ <left> left=%p | <right> right=%p } "
+                        "}\"];\n",
+                        (const void *) node,
+                        node->data.type, node->data.opcode, node->data.num,
+                        isprint(node->data.var) ? node->data.var : '%',
+                        (const void *) node->left, (const void *) node->right);
 
         if (NULL != node->left)
         {
