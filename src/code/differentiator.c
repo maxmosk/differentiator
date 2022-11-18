@@ -14,7 +14,9 @@ static enum OP_CODE getopcode(const char opsign);
 
 static void dump(const treeNode_t *node);
 
+#ifndef NDEBUG
 static void dumpLaTeX(FILE *file, const treeNode_t *node);
+#endif /* NDEBUG */
 /*)===========================================================================*/
 
 
@@ -103,12 +105,16 @@ static enum OP_CODE getopcode(const char opsign)
 
 static void dump(const treeNode_t *node)
 {
+    CHECK(NULL != node, ;);
+#ifndef NDEBUG
     FILE *outfile = fopen(TeXdumpName, "a");
     fprintf(outfile, "$$");
     dumpLaTeX(outfile, node);
     fprintf(outfile, "$$\n");
+#endif /* NDEBUG */
 }
 
+#ifndef NDEBUG
 static void dumpLaTeX(FILE *file, const treeNode_t *node)
 {
     CHECK(NULL != file, ;);
@@ -168,4 +174,5 @@ static void dumpLaTeX(FILE *file, const treeNode_t *node)
             return;
     }
 }
+#endif /* NDEBUG */
 /*)===========================================================================*/
