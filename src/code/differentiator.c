@@ -50,7 +50,6 @@ const char *exprparse(tree_t *dest, treeNode_t *node, const char *src)
         char sign = '\0';
         CHECK(1 == sscanf(src, " %c %n", &sign, &shift), NULL);
         src += shift;
-        printf("Parsed signum: %c\n", sign);
         node->data.type = NODE_OP;
         CHECK(OP_ERROR != (node->data.opcode = getopcode(sign)), NULL);
 
@@ -61,13 +60,11 @@ const char *exprparse(tree_t *dest, treeNode_t *node, const char *src)
     }
     else if (1 == sscanf(src, " %lf %n", &num, &shift))
     {
-        printf("Parsed number: %lg\n", num);
         node->data.type = NODE_NUM;
         node->data.num = num;
     }
     else if (1 == sscanf(src, " %c %n", &var, &shift))
     {
-        printf("Parsed variable: %c\n", var);
         node->data.type = NODE_VAR;
         node->data.var = var;
     }

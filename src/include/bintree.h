@@ -47,6 +47,10 @@ enum TREE_CODES treeVerify(const tree_t *tree);
 
 enum TREE_CODES treeDtor(tree_t *tree);
 
+treeNode_t *treeNodeCtor(const treeData_t elem);
+
+void treeNodeDtor(treeNode_t *node);
+
 
 #endif /* BINTREE_H_INCLUDED__ */
 

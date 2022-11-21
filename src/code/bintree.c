@@ -15,10 +15,6 @@ static void treeGraph(const tree_t *tree, const char *filename);
 
 static void treeGraphAddNode(const treeNode_t *node, FILE *file);
 #endif /* NDEBUG */
-
-static treeNode_t *treeNodeCtor(const treeData_t elem);
-
-static void treeNodeDtor(treeNode_t *node);
 /*)===========================================================================*/
 
 
@@ -118,6 +114,29 @@ enum TREE_CODES treeDtor(tree_t *tree)
 
     return TREE_SUCCESS;
 }
+
+treeNode_t *treeNodeCtor(const treeData_t elem)
+{
+    treeNode_t *node = calloc(1, sizeof *node);
+    CHECK(NULL != node, NULL);
+
+    node->right = node->left = NULL;
+    node->data = elem;
+
+    return node;
+}
+
+void treeNodeDtor(treeNode_t *node)
+{
+    if (NULL == node)
+    {
+        return;
+    }
+
+    treeNodeDtor(node->right);
+    treeNodeDtor(node->left);
+    free(node);
+}
 /*)===========================================================================*/
 
 
@@ -183,28 +202,4 @@ static void treeGraphAddNode(const treeNode_t *node, FILE *file)
     treeGraphAddNode(node->right, file);
 }
 #endif /* NDEBUG */
-
-static treeNode_t *treeNodeCtor(const treeData_t elem)
-{
-    treeNode_t *node = calloc(1, sizeof *node);
-    CHECK(NULL != node, NULL);
-
-    node->right = node->left = NULL;
-    node->data = elem;
-
-    return node;
-}
-
-static void treeNodeDtor(treeNode_t *node)
-{
-    if (NULL == node)
-    {
-        return;
-    }
-
-    treeNodeDtor(node->right);
-    treeNodeDtor(node->left);
-    free(node);
-}
 /*)===========================================================================*/
-
